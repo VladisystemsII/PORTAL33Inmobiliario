@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>PORTAL3.3 | Propiedades</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Explora propiedades residenciales y comerciales en venta y arriendo. Inmuebles verificados con información clara para decisiones seguras.">
+  <meta name="keywords" content="propiedades, inmuebles, venta, arriendo, residencial, comercial">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="PORTAL3.3 | Propiedades">
+  <meta property="og:description" content="Inmuebles verificados · Información clara · Decisiones seguras">
+  <meta property="og:image" content="img/logo-portal33Logo.png">
+  <meta property="og:type" content="website">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- =======================================
+     HEADER - NAVEGACIÓN PRINCIPAL
+     ======================================= -->
+ <header id="main-header">
+  <div class="container nav">
+    <div class="logo">
+      <img src="img/logo-portal33Logo.png" alt="Portal3.3 - Inmobiliaria">
+    </div>
+    <nav class="menu">
+      <a href="index.html">INICIO</a>
+      <a href="propiedades.html">PROPIEDADES</a>
+      <a href="captacion.html">PUBLICA TU PROPIEDAD</a>
+      <a href="blog.html">BLOG</a>
+      <a href="notificaciones.html">NOTIFICACIONES / BÚSQUEDA</a>
+    </nav>
+   </div>
+  </header>
+
+<!-- =======================================
+     SUBHEADER - FILTROS DE PROPIEDADES
+     ======================================= -->
+<nav class="property-subnav" role="navigation" aria-label="Filtros de propiedades">
+  <div class="container">
+    <div class="subnav-group">
+      <span class="subnav-title">RESIDENCIAL</span>
+      <a href="javascript:void(0)" 
+         data-tipo="Residencial" 
+         data-operacion="Venta" 
+         class="subnav-link"
+         aria-label="Filtrar propiedades residenciales en venta">Venta</a>
+      <a href="javascript:void(0)" 
+         data-tipo="Residencial" 
+         data-operacion="Arriendo" 
+         class="subnav-link"
+         aria-label="Filtrar propiedades residenciales en arriendo">Arriendo</a>
+    </div>
+    <div class="subnav-group">
+      <span class="subnav-title">COMERCIAL</span>
+      <a href="javascript:void(0)" 
+         data-tipo="Comercial" 
+         data-operacion="Venta" 
+         class="subnav-link"
+         aria-label="Filtrar propiedades comerciales en venta">Venta</a>
+      <a href="javascript:void(0)" 
+         data-tipo="Comercial" 
+         data-operacion="Arriendo" 
+         class="subnav-link"
+         aria-label="Filtrar propiedades comerciales en arriendo">Arriendo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- =======================================
+     HERO SECTION
+     ======================================= -->
+<section class="hero">
+  <div class="container">
+    <h1>Propiedades disponibles</h1>
+    <p>Inmuebles verificados · Información clara · Decisiones seguras</p>
+  </div>
+</section>
+
+<!-- =======================================
+     LISTADO DE PROPIEDADES
+     ======================================= -->
+<section id="propiedades">
+  <div class="container">
+    <div class="prop-grid" id="propertyGrid" role="list"></div>
+  </div>
+</section>
+
+<!-- =======================================
+     LOADING BOX
+     ======================================= -->
+<div id="loadingProperties" class="loading-box" role="status" aria-live="polite">
+  <h2>Cargando propiedades…</h2>
+</div>
+
+<!-- =======================================
+     FOOTER
+     ======================================= -->
+<footer>
+  <div class="container footer-grid">
+    <div><h4>Contacto</h4><p>WhatsApp</p><p>Email</p></div>
+    <div><h4>Redes</h4><p>Instagram</p><p>LinkedIn</p></div>
+    <div>
+    <h4>Agente</h4>
+       <div class="agent-photo">
+       <img src="img/Foto-perfil.png" alt="Agente">
+      </div>
+      <p style="margin-top:5px; font-weight:bold;">María Patricia Renta</p>
+    </div>
+  </div>
+  <div class="footer-slogan">Conocimiento local. Estrategia inmobiliaria. Resultados reales.</div>
+</footer>
+
+<!-- =======================================
+     JAVASCRIPT - LÓGICA DE PROPIEDADES
+     ======================================= -->
+<script>
+  // ===== CONFIGURACIÓN =====
+  const jsonURL = "https://script.google.com/macros/s/AKfycbyM9BBgzttc9ZAbNuONZkkPCpOsSyZ3vqnBx9xajwhZwDVC64s_x0iqdujyYgcdWlKiTQ/exec";
+  const WHATSAPP_NUMBER = "573001234567"; // ⚠️ CAMBIA ESTE NÚMERO
+  
+  // Cache para evitar múltiples requests
+  let cachedProperties = null;
+
+  // ===== FUNCIÓN: Normalizar URLs de Google Drive =====
+  function normalizarFoto(url) {
+    if (!url) return "img/default.png";
+
+    // Buscar el ID en diferentes formatos de URL de Drive
+    let m = url.match(/id=([a-zA-Z0-9_-]+)/);
+    if (!m) m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (!m) return url;
+
+    // Retornar URL optimizada para thumbnails
+    return "https://drive.google.com/thumbnail?id=" + m[1] + "&sz=w1200";
+  }
+
+  // ===== FUNCIÓN: Sanitizar texto para prevenir XSS =====
+  function sanitizeText(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // ===== FUNCIÓN PRINCIPAL: Cargar y Filtrar Propiedades =====
+  async function loadProperties(tipoFiltro = null, operacionFiltro = null) {
+    try {
+      const loading = document.getElementById("loadingProperties");
+      const grid = document.getElementById("propertyGrid");
+      
+      // Mostrar loading
+      loading.style.display = "block";
+
+      // Fetch solo si no hay caché
+      if (!cachedProperties) {
+        const response = await fetch(jsonURL);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        cachedProperties = await response.json();
+        console.log("✅ Propiedades cargadas:", cachedProperties.length);
+      }
+
+      const propiedades = cachedProperties;
+      
+      // Limpiar grid
+      grid.innerHTML = "";
+      
+      // Ocultar loading
+      loading.style.display = "none";
+
+      let contador = 0;
+
+      // ===== FILTRAR Y RENDERIZAR PROPIEDADES =====
+      propiedades.forEach((prop, index) => {
+        // Validar que la propiedad esté activa
+        if (prop["Activo (si/no)"]?.toLowerCase() !== "si") return;
+
+        // Aplicar filtros
+        if (tipoFiltro && prop["Residencial / Comercial"] !== tipoFiltro) return;
+        if (operacionFiltro && !prop["Estado"]?.includes(operacionFiltro)) return;
+
+        contador++;
+
+        // Normalizar foto
+        const fotoFinal = normalizarFoto(prop["Foto 1"]);
+
+        // Crear card
+        const card = document.createElement("div");
+        card.className = "prop-card";
+        card.setAttribute("role", "listitem");
+        
+        // ⭐ HACER LA CARD CLICKEABLE
+        card.style.cursor = "pointer";
+        card.style.transition = "transform 0.3s ease, box-shadow 0.3s ease";
+        
+        // Hover effect
+        card.addEventListener('mouseenter', () => {
+          card.style.transform = "translateY(-5px)";
+          card.style.boxShadow = "0 15px 50px rgba(0,0,0,0.2)";
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = "translateY(0)";
+          card.style.boxShadow = "0 10px 30px rgba(0,0,0,0.12), 0 4px 10px rgba(0,0,0,0.08)";
+        });
+
+        // Sanitizar datos para prevenir XSS
+        const titulo = sanitizeText(prop["Título"] || "Sin título");
+        const ciudad = sanitizeText(prop["Ciudad"] || "No especificada");
+        const area = sanitizeText(prop["Área m2"] || "-");
+        const precio = sanitizeText(prop["Precio Venta COP"] || "Consultar");
+        const codigo = sanitizeText(prop["CÓDIGO"] || "");
+
+        card.innerHTML = `
+          <div class="prop-img">
+            <img src="${fotoFinal}" 
+                 alt="Propiedad ${titulo}"
+                 loading="lazy" 
+                 onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Sin+Imagen';">
+          </div>
+          <div class="prop-body">
+            <h3>${titulo}</h3>
+            <p class="prop-meta"><strong>Ciudad:</strong> ${ciudad}</p>
+            <p class="prop-meta"><strong>Área:</strong> ${area} m²</p>
+            <p class="prop-price">${precio}</p>
+            <button class="prop-btn" onclick="event.stopPropagation(); openWhatsApp('${codigo}', '${titulo.replace(/'/g, "\\'")}')">
+              Contactar por WhatsApp
+            </button>
+            <button class="prop-btn" style="background: #fff; color: #111; border: 2px solid #111; margin-top: 8px;">
+              Ver Detalles
+            </button>
+          </div>
+        `;
+        
+        // ⭐ CLICK EN LA CARD ABRE EL DETALLE
+        /*    card.addEventListener('click', () => {
+          verDetalle(prop);
+        });   */
+             card.addEventListener('click', () => {
+                const codigo = encodeURIComponent(prop["CÓDIGO"]);
+                window.location.href = `detalle-propiedad.html?codigo=${codigo}`;
+             });
+
+
+                    
+        grid.appendChild(card);
+      });
+
+      // ===== MENSAJE SI NO HAY RESULTADOS =====
+      if (contador === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+            <h3 style="margin-bottom: 10px; color: #666; font-size: 1.4rem;">
+              No se encontraron propiedades
+            </h3>
+            <p style="color: #999; font-size: 1rem;">
+              Intenta con otra combinación de filtros o 
+              <a href="javascript:void(0)" 
+                 onclick="resetFiltros()" 
+                 style="color: #111; text-decoration: underline; font-weight: 600;">
+                ver todas las propiedades
+              </a>
+            </p>
+          </div>
+        `;
+      } else {
+        console.log(`✅ Mostrando ${contador} propiedad(es)`);
+      }
+
+    } catch (err) {
+      console.error("❌ Error cargando propiedades:", err);
+      
+      const loading = document.getElementById("loadingProperties");
+      const grid = document.getElementById("propertyGrid");
+      
+      loading.style.display = "none";
+      
+      grid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+          <h3 style="margin-bottom: 10px; color: #d32f2f;">
+            Error al cargar las propiedades
+          </h3>
+          <p style="color: #666;">
+            Por favor, intenta recargar la página o contacta al administrador.
+          </p>
+          <button onclick="location.reload()" 
+                  style="margin-top: 20px; padding: 10px 20px; background: #111; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+            Recargar página
+          </button>
+        </div>
+      `;
+    }
+  }
+
+  // ⭐ NUEVA FUNCIÓN: Ver detalle de propiedad
+  function verDetalle(propiedad) {
+    console.log('🔍 Abriendo detalle de:', propiedad["Título"]);
+    
+    // Guardar la propiedad completa en localStorage
+    localStorage.setItem('propiedadSeleccionada', JSON.stringify(propiedad));
+    
+    // Redirigir a la página de detalle
+    window.location.href = `detalle-propiedad.html?codigo=${encodeURIComponent(propiedad.CÓDIGO)}`;
+  }
+
+  // ===== FUNCIÓN: Filtrar y Activar Link =====
+  function filtrar(tipo, operacion, elemento) {
+    console.log(`🔍 Filtrando: ${tipo} - ${operacion}`);
+    
+    // Remover clase active de todos los links
+    document.querySelectorAll('.subnav-link').forEach(link => {
+      link.classList.remove('active');
+    });
+    
+    // Agregar clase active al link clickeado
+    if (elemento) {
+      elemento.classList.add('active');
+    }
+    
+    // Cargar propiedades con filtros
+    loadProperties(tipo, operacion);
+    
+    // Scroll suave a la sección de propiedades
+    setTimeout(() => {
+      document.getElementById("propiedades").scrollIntoView({ 
+        behavior: "smooth",
+        block: "start"
+      });
+    }, 100);
+  }
+
+  // ===== FUNCIÓN: Reset de Filtros =====
+  function resetFiltros() {
+    // Remover active de todos
+    document.querySelectorAll('.subnav-link').forEach(link => {
+      link.classList.remove('active');
+    });
+    
+    // Cargar todas las propiedades
+    loadProperties();
+    
+    console.log("🔄 Filtros reseteados");
+  }
+
+  // ===== FUNCIÓN: Abrir WhatsApp =====
+  function openWhatsApp(codigo, titulo) {
+    const mensaje = `Hola! Estoy interesado en la propiedad *${codigo}*: ${titulo}`;
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+    
+    console.log("📱 Abriendo WhatsApp:", codigo);
+    window.open(url, '_blank');
+  }
+
+  // ===== INICIALIZACIÓN AL CARGAR LA PÁGINA =====
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log("🚀 Portal 3.3 - Módulo Propiedades cargado");
+    
+    // Cargar todas las propiedades al inicio
+    loadProperties();
+    
+    // ===== AGREGAR EVENT LISTENERS A LOS FILTROS =====
+    document.querySelectorAll('.subnav-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const tipo = this.dataset.tipo;
+        const operacion = this.dataset.operacion;
+        
+        filtrar(tipo, operacion, this);
+      });
+    });
+    
+    console.log("✅ Event listeners agregados a filtros");
+  });
+
+  // ===== MANEJO DE ERRORES GLOBALES =====
+  window.addEventListener('error', function(e) {
+    console.error('❌ Error global:', e.message);
+  });
+
+</script>
+<script src="header.js"></script>
+</body>
+</html>

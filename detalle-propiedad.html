@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Detalle de Propiedad | PORTAL3.3</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Detalle completo de la propiedad con fotos, características y precios.">
+  <meta name="keywords" content="propiedades, inmuebles, venta, arriendo, residencial, comercial">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="PORTAL3.3 | Detalle de Propiedad">
+  <meta property="og:description" content="Ver detalles completos de la propiedad">
+  <meta property="og:image" content="img/logo-portal33Logo.png">
+  <meta property="og:type" content="website">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- =======================================
+     HEADER - NAVEGACIÓN PRINCIPAL
+     ======================================= -->
+  
+<header id="main-header">
+  <div class="container nav">
+    <div class="logo">
+      <img src="img/logo-portal33Logo.png" alt="Portal3.3 - Inmobiliaria">
+    </div>
+    <nav class="menu">
+      <a href="index.html">INICIO</a>
+      <a href="propiedades.html">PROPIEDADES</a>
+      <a href="captacion.html">PUBLICA TU PROPIEDAD</a>
+      <a href="blog.html">BLOG</a>
+      <a href="notificaciones.html">NOTIFICACIONES / BÚSQUEDA</a>
+    </nav>
+  </div>
+</header>
+<!-- =======================================
+     CONTENIDO PRINCIPAL
+     ======================================= -->
+<div class="detalle-container" id="detalleContainer">
+
+
+    <nav class="breadcrumb">
+      <a href="index.html">Inicio</a> &gt; 
+      <a href="propiedades.html">Propiedades</a> &gt; 
+      <span>Detalle</span>
+    </nav>
+
+  
+  <!-- Botón Volver -->
+  <a href="propiedades.html" class="btn-volver">
+    ← Volver al listado
+  </a>
+  
+  <!-- Mensaje de carga inicial -->
+  <div class="mensaje-carga" id="mensajeCarga">
+    <h2>Cargando información de la propiedad...</h2>
+    <div class="loading-box" style="position: static; transform: none; margin: 20px auto;"></div>
+  </div>
+  
+  <!-- Contenido de la propiedad (se llena con JavaScript) -->
+  <div id="contenidoPropiedad" style="display: none;">
+    
+    <!-- Galería de Fotos -->
+    <section class="galeria-section">
+      <div class="foto-principal" id="fotoPrincipal">
+        <img src="" alt="Foto principal de la propiedad" id="imgPrincipal">
+      </div>
+      <div class="thumbnails" id="thumbnailsContainer"></div>
+    </section>
+    
+    <!-- Grid de Información -->
+    <div class="info-grid">
+      
+      <!-- Información Principal -->
+      <div class="info-principal">
+        <h1 id="propTitulo">Título de la propiedad</h1>
+        <div class="ubicacion">
+          <span>📍</span>
+          <span id="propUbicacion">Ciudad, Barrio</span>
+        </div>
+        <div class="tipo-badge" id="propTipo">Tipo</div>
+        
+        <!-- Características Principales -->
+        <div class="caracteristicas">
+          <div class="caracteristica-item">
+            <span class="icono">📐</span>
+            <span class="valor" id="propArea">0</span>
+            <span class="label">m² Área</span>
+          </div>
+          <div class="caracteristica-item">
+            <span class="icono">🛏️</span>
+            <span class="valor" id="propHabitaciones">0</span>
+            <span class="label">Habitaciones</span>
+          </div>
+          <div class="caracteristica-item">
+            <span class="icono">🚿</span>
+            <span class="valor" id="propBanos">0</span>
+            <span class="label">Baños</span>
+          </div>
+          <div class="caracteristica-item">
+            <span class="icono">🚗</span>
+            <span class="valor" id="propParqueaderos">0</span>
+            <span class="label">Parqueaderos</span>
+          </div>
+        </div>
+        
+        <!-- Descripción -->
+        <div class="descripcion-section">
+          <h3>Descripción</h3>
+          <p id="propDescripcion">Descripción de la propiedad...</p>
+        </div>
+      </div>
+      
+      <!-- Sidebar de Contacto -->
+      <div class="sidebar-contacto">
+        <div class="precio-principal" id="propPrecioVenta">$0</div>
+        <span class="precio-label" id="propEstadoVenta">Precio de venta</span>
+        
+        <div class="precio-secundario" id="precioArriendoBox" style="display: none;">
+          <span class="label">Precio de arriendo</span>
+          <span class="valor" id="propPrecioArriendo">$0</span>
+        </div>
+        
+        <div class="detalle-extra">
+          <div class="detalle-extra-item">
+            <span class="label">Estrato:</span>
+            <span class="valor" id="propEstrato">-</span>
+          </div>
+          <div class="detalle-extra-item">
+            <span class="label">Administración:</span>
+            <span class="valor" id="propAdministracion">-</span>
+          </div>
+          <div class="detalle-extra-item">
+            <span class="label">Clasificación:</span>
+            <span class="valor" id="propClasificacion">-</span>
+          </div>
+        </div>
+        
+        <button class="btn-whatsapp" id="btnWhatsapp">
+          <span style="font-size: 1.5rem;">📱</span>
+          Contactar por WhatsApp
+        </button>
+      </div>
+      
+    </div>
+    
+  </div>
+  
+</div>
+
+<!-- =======================================
+     FOOTER
+     ======================================= -->
+<footer>
+  <div class="container footer-grid">
+    <div><h4>Contacto</h4><p>WhatsApp</p><p>Email</p></div>
+    <div><h4>Redes</h4><p>Instagram</p><p>LinkedIn</p></div>
+    <div>
+    <h4>Agente</h4>
+       <div class="agent-photo">
+       <img src="img/Foto-perfil.png" alt="Agente">
+      </div>
+      <p style="margin-top:5px; font-weight:bold;">María Patricia Renta</p>
+    </div>
+  </div>
+  <div class="footer-slogan">Conocimiento local. Estrategia inmobiliaria. Resultados reales.</div>
+</footer>
+
+<!-- =======================================
+     JAVASCRIPT
+     ======================================= -->
+<script>
+  const WHATSAPP_NUMBER = "573001234567"; // ⚠️ CAMBIA ESTE NÚMERO
+  
+  // ===== OBTENER DATOS DE LA PROPIEDAD DESDE localStorage =====
+  function cargarPropiedad() {
+    try {
+      const propiedadData = localStorage.getItem('propiedadSeleccionada');
+      
+      if (!propiedadData) {
+        mostrarError('No se encontró información de la propiedad');
+        return;
+      }
+      
+      const propiedad = JSON.parse(propiedadData);
+      console.log('✅ Propiedad cargada:', propiedad);
+      
+      renderizarPropiedad(propiedad);
+      
+    } catch (error) {
+      console.error('❌ Error cargando propiedad:', error);
+      mostrarError('Error al cargar la información de la propiedad');
+    }
+  }
+  
+  // ===== RENDERIZAR TODA LA INFORMACIÓN =====
+  function renderizarPropiedad(prop) {
+    // Ocultar mensaje de carga
+    document.getElementById('mensajeCarga').style.display = 'none';
+    document.getElementById('contenidoPropiedad').style.display = 'block';
+    
+    // ===== TÍTULO Y UBICACIÓN =====
+    document.getElementById('propTitulo').textContent = prop["Título"] || "Sin título";
+    
+    const ciudad = prop["Ciudad"] || "";
+    const barrio = prop["Barrio/Sector"] || "";
+    document.getElementById('propUbicacion').textContent = `${ciudad}${barrio ? ', ' + barrio : ''}`;
+    
+    // ===== TIPO =====
+    const tipo = prop["Tipo"] || "Propiedad";
+    const clasificacion = prop["Residencial / Comercial"] || "";
+    document.getElementById('propTipo').textContent = `${tipo} ${clasificacion}`;
+    
+    // ===== CARACTERÍSTICAS =====
+    document.getElementById('propArea').textContent = prop["Área m2"] || "0";
+    document.getElementById('propHabitaciones').textContent = prop["Habitaciones"] || "0";
+    document.getElementById('propBanos').textContent = prop["Baños"] || "0";
+    document.getElementById('propParqueaderos').textContent = prop["Parqueaderos"] || "0";
+    
+    // ===== DESCRIPCIÓN =====
+    document.getElementById('propDescripcion').textContent = prop["Descripción"] || "Sin descripción disponible.";
+    
+    // ===== PRECIOS =====
+    const estado = prop["Estado"] || "";
+    const precioVenta = prop["Precio Venta COP"] || "";
+    const precioArriendo = prop["Precio Arriendo COP"] || "";
+    
+    // Precio principal
+    if (estado.includes("Venta") && precioVenta) {
+      document.getElementById('propPrecioVenta').textContent = precioVenta;
+      document.getElementById('propEstadoVenta').textContent = "Precio de venta";
+    } else if (estado.includes("Arriendo") && precioArriendo) {
+      document.getElementById('propPrecioVenta').textContent = precioArriendo;
+      document.getElementById('propEstadoVenta').textContent = "Precio de arriendo";
+    } else {
+      document.getElementById('propPrecioVenta').textContent = "Consultar";
+      document.getElementById('propEstadoVenta').textContent = "Precio";
+    }
+    
+    // Precio secundario (si tiene ambos)
+    if (estado.includes("Venta") && estado.includes("Arriendo") && precioArriendo) {
+      document.getElementById('precioArriendoBox').style.display = 'block';
+      document.getElementById('propPrecioArriendo').textContent = precioArriendo;
+    }
+    
+    // ===== DETALLES EXTRA =====
+    document.getElementById('propEstrato').textContent = prop["Estrato"] || "-";
+    document.getElementById('propAdministracion').textContent = prop["Administración"] || "-";
+    document.getElementById('propClasificacion').textContent = prop["Residencial / Comercial"] || "-";
+    
+    // ===== GALERÍA DE FOTOS =====
+    cargarGaleria(prop);
+    
+    // ===== BOTÓN WHATSAPP =====
+    document.getElementById('btnWhatsapp').addEventListener('click', () => {
+      const titulo = prop["Título"] || "esta propiedad";
+      const mensaje = `Hola! Estoy interesado en ${titulo}`;
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, '_blank');
+    });
+  }
+  
+  // ===== NORMALIZAR URLs DE GOOGLE DRIVE =====
+  function normalizarFoto(url) {
+    if (!url) return null;
+    
+    let m = url.match(/id=([a-zA-Z0-9_-]+)/);
+    if (!m) m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (!m) return url;
+    
+    return "https://drive.google.com/thumbnail?id=" + m[1] + "&sz=w1200";
+  }
+  
+  // ===== CARGAR GALERÍA DE FOTOS =====
+  function cargarGaleria(prop) {
+    const fotosArray = [];
+    
+    // Recopilar todas las fotos (Foto 1 hasta Foto 8)
+    for (let i = 1; i <= 8; i++) {
+      const fotoKey = `Foto ${i}`;
+      if (prop[fotoKey]) {
+        const fotoNormalizada = normalizarFoto(prop[fotoKey]);
+        if (fotoNormalizada) {
+          fotosArray.push(fotoNormalizada);
+        }
+      }
+    }
+    
+    // Si no hay fotos, usar placeholder
+    if (fotosArray.length === 0) {
+      fotosArray.push('https://via.placeholder.com/1200x800?text=Sin+Imagen');
+    }
+    
+    // Establecer foto principal
+    const imgPrincipal = document.getElementById('imgPrincipal');
+    imgPrincipal.src = fotosArray[0];
+    imgPrincipal.onerror = function() {
+      this.src = 'https://via.placeholder.com/1200x800?text=Sin+Imagen';
+    };
+    
+    // Crear thumbnails
+    const thumbnailsContainer = document.getElementById('thumbnailsContainer');
+    thumbnailsContainer.innerHTML = '';
+    
+    fotosArray.forEach((foto, index) => {
+      const thumbnail = document.createElement('div');
+      thumbnail.className = 'thumbnail' + (index === 0 ? ' active' : '');
+      
+      const img = document.createElement('img');
+      img.src = foto;
+      img.alt = `Foto ${index + 1}`;
+      img.onerror = function() {
+        this.src = 'https://via.placeholder.com/400x300?text=Sin+Imagen';
+      };
+      
+      thumbnail.appendChild(img);
+      
+      // Click en thumbnail cambia foto principal
+      thumbnail.addEventListener('click', () => {
+        // Cambiar foto principal
+        document.getElementById('imgPrincipal').src = foto;
+        
+        // Actualizar clase active
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+        thumbnail.classList.add('active');
+      });
+      
+      thumbnailsContainer.appendChild(thumbnail);
+    });
+    
+    console.log(`✅ Galería cargada con ${fotosArray.length} foto(s)`);
+  }
+  
+  // ===== MOSTRAR ERROR =====
+  function mostrarError(mensaje) {
+    document.getElementById('mensajeCarga').innerHTML = `
+      <div class="mensaje-error">
+        <h2>⚠️ Error</h2>
+        <p>${mensaje}</p>
+        <a href="propiedades.html" class="btn-volver" style="display: inline-flex; margin: 0 auto;">
+          ← Volver al listado
+        </a>
+      </div>
+    `;
+  }
+  
+  // ===== INICIALIZACIÓN =====
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 Módulo Detalle de Propiedad cargado');
+    cargarPropiedad();
+  });
+</script>
+<script src="header.js"></script>
+</body>
+</html>

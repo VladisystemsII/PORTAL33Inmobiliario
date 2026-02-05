@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Notificaciones / Búsqueda - Portal3.3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Estilos generales del portal -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Estilos específicos del módulo */
+    .captura-usuario {
+      padding: 50px 20px;
+      background-color: #f9f9f9;
+      border-radius: 12px;
+      margin: 50px auto;
+      max-width: 900px;
+    }
+
+    .captura-usuario h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 25px;
+      color: #1a1a1a;
+    }
+
+    .lista-pasos {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .lista-pasos ol {
+      padding-left: 20px;
+    }
+
+    .form-google {
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .form-google iframe {
+      border: none;
+      box-shadow: none;
+      border-radius: 12px;
+    }
+
+    .cta-form {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .cta-form button {
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .cta-form button:hover {
+      background-color: #0056b3;
+    }
+
+
+    
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header id="main-header">
+   <div class="container nav">
+    <div class="logo">
+      <img src="img/logo-portal33Logo.png" alt="Portal3.3 - Inmobiliaria">
+    </div>
+    <nav class="menu">
+      <a href="index.html">INICIO</a>
+      <a href="propiedades.html">PROPIEDADES</a>
+      <a href="captacion.html">PUBLICA TU PROPIEDAD</a>
+      <a href="blog.html">BLOG</a>
+      <a href="notificaciones.html">NOTIFICACIONES / BÚSQUEDA</a>
+    </nav>
+   </div>
+  </header>
+
+  <!-- MÓDULO NOTIFICACIONES / BÚSQUEDA -->
+  <section id="notificaciones-busqueda" class="captura-usuario">
+    <h2>Notificaciones / Búsqueda</h2>
+
+    <!-- LISTA DE PASOS -->
+    <div class="lista-pasos">
+      <p>Para recibir propiedades o dejarnos tu requerimiento, sigue estos pasos:</p>
+      <ol>
+        <li>Deja tus datos de contacto.</li>
+        <li>Selecciona el tipo de propiedad o requerimiento.</li>
+        <li>Recibe notificaciones de nuevas propiedades directamente en tu celular o correo.</li>
+        <li>Si no encontraste lo que buscas, déjanos tu solicitud en el formulario.</li>
+      </ol>
+    </div>
+
+    <!-- FORMULARIO GOOGLE FORM EMBEBIDO -->
+    <div class="form-google">
+      <iframe 
+        id="googleForm"
+        src="https://docs.google.com/forms/d/e/1FAIpQLSdKdP1P9vkldgIZWA5symwzMS9_TQ35wYC1dw3xsldeMkGeog/viewform?usp=sf_link" 
+        width="100%" 
+        height="800" 
+        frameborder="0" 
+        marginheight="0" 
+        marginwidth="0">
+        Cargando…
+      </iframe>
+    </div>
+
+ 
+
+      <!-- BOTÓN DE CTA -->
+      <div class="cta-form">
+        <button id="scrollToForm">Comenzar ahora</button>
+      </div>
+
+ </section>
+
+  <!-- FOOTER -->
+ <footer>
+  <div class="container footer-grid">
+    <div><h4>Contacto</h4><p>WhatsApp</p><p>Email</p></div>
+    <div><h4>Redes</h4><p>Instagram</p><p>LinkedIn</p></div>
+    <div>
+    <h4>Agente</h4>
+       <div class="agent-photo">
+          <img src="img/Foto-perfil.png" alt="Agente">
+             </div>
+              <p style="margin-top:5px; font-weight:bold;">María Patricia Renta</p>
+             </div>
+          </div>
+     <div class="footer-slogan">Conocimiento local. Estrategia inmobiliaria. Resultados reales.</div>
+   </footer>
+
+     <script>
+         document.getElementById("scrollToForm").onclick = function () {
+         window.scrollTo({ top: 0, behavior: "smooth" });
+         };
+     </script>
+
+<script src="header.js"></script>
+</body>
+</html>

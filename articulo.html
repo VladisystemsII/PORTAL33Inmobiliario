@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Artículo Blog - Portal3.3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blog.css">
+  <style>
+    /* Estilo específico para artículo */
+    .article-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: none; /* Se muestra después de cargar */
+    }
+
+    .article-title {
+      font-size: 2em;
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+
+    .article-date {
+      font-size: 0.9em;
+      color: #7f8c8d;
+      margin-bottom: 20px;
+    }
+
+    .article-content {
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #34495e;
+    }
+
+.btn-volver {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #d9dcde;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.btn-volver:hover {
+  background-color: #0056b3;
+}
+  </style>
+</head>
+<body>
+
+  <!-- HEADER PORTAL3.3 -->
+  <header id="main-header">
+    <div class="container nav">
+      <div class="logo">
+        <img src="img/logo-portal33Logo.png" alt="Portal3.3 - Inmobiliaria">
+      </div>
+      <nav class="menu">
+        <a href="index.html">INICIO</a>
+        <a href="propiedades.html">PROPIEDADES</a>
+        <a href="captacion.html">PUBLICA TU PROPIEDAD</a>
+        <a href="blog.html">BLOG</a>
+        <a href="notificaciones.html">NOTIFICACIONES / BÚSQUEDA</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTENIDO ARTÍCULO -->
+  <main>
+    <div class="article-container" id="articleContainer">
+        <h1 class="article-title" id="articleTitle"></h1>
+        <p class="article-date" id="articleDate"></p>
+        <div class="article-content" id="articleContent"></div>
+        <a href="blog.html" class="btn-volver">← Volver Blogs</a>
+
+    </div>
+  </main>
+
+  <!-- SCRIPT CARGA ARTÍCULO -->
+  <script>
+    const BLOG_ENDPOINT = "https://script.google.com/macros/s/AKfycbz8IamMmWTHZpeCBrp_4LoOfciihQJnThGFyDPkCotBo7waK38VJz167lHsIrB1eV79mw/exec";
+
+    const titleEl   = document.getElementById("articleTitle");
+    const dateEl    = document.getElementById("articleDate");
+    const contentEl = document.getElementById("articleContent");
+    const containerEl = document.getElementById("articleContainer");
+
+    // Crear loading dinámico igual que Blog / Propiedades
+    const loading = document.createElement("div");
+    loading.className = "loading-box";
+    loading.innerHTML = "<h2>Cargando Artículo…</h2>";
+    document.body.appendChild(loading);
+    loading.style.display = "block";
+
+    // Obtener código desde URL
+    const params = new URLSearchParams(window.location.search);
+    const codigo = params.get("codigo");
+
+    if (!codigo) {
+      loading.style.display = "none";
+      titleEl.innerText = "Artículo no encontrado";
+      containerEl.style.display = "block";
+    } else {
+      fetch(BLOG_ENDPOINT)
+        .then(r => r.json())
+        .then(data => {
+
+          const post = data.find(p =>
+            p["CÓDIGO"]?.trim() === codigo.trim() &&
+            String(p["Activo (si/no)"]).toLowerCase() === "si"
+          );
+
+          if (!post) {
+            titleEl.innerText = "Artículo no encontrado o inactivo";
+            containerEl.style.display = "block";
+            return;
+          }
+
+          titleEl.innerText = post["Titulo"];
+          dateEl.innerText = new Date(post["Fecha"])
+            .toLocaleDateString("es-CO", { year: "numeric", month: "long", day: "numeric" });
+          contentEl.innerHTML = post["Contenido"] ? post["Contenido"].replace(/\n/g, "<br>") : "";
+
+          containerEl.style.display = "block"; // mostrar contenido real
+
+        })
+        .catch(err => {
+          console.error("❌ Error cargando artículo:", err);
+          titleEl.innerText = "Error cargando artículo";
+          containerEl.style.display = "block";
+        })
+        .finally(() => {
+          loading.style.display = "none"; // ocultar loading siempre
+        });
+    }
+  </script>
+
+  <footer>
+    <div class="container footer-grid">
+      <div><h4>Contacto</h4><p>WhatsApp</p><p>Email</p></div>
+      <div><h4>Redes</h4><p>Instagram</p><p>LinkedIn</p></div>
+      <div>
+        <h4>Agente</h4>
+        <div class="agent-photo">
+          <img src="img/Foto-perfil.png" alt="Agente">
+        </div>
+        <p style="margin-top:5px; font-weight:bold;">María Patricia Renta</p>
+      </div>
+    </div>
+    <div class="footer-slogan">Conocimiento local. Estrategia inmobiliaria. Resultados reales.</div>
+  </footer>
+
+  <script src="header.js"></script>
+</body>
+</html>

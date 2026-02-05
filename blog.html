@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Blog Portal3.3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blog.css">
+</head>
+<body>
+
+  <!-- HEADER PORTAL3.3 -->
+ <header id="main-header">
+  <div class="container nav">
+    <div class="logo">
+      <img src="img/logo-portal33Logo.png" alt="Portal3.3 - Inmobiliaria">
+    </div>
+    <nav class="menu">
+      <a href="index.html">INICIO</a>
+      <a href="propiedades.html">PROPIEDADES</a>
+      <a href="captacion.html">PUBLICA TU PROPIEDAD</a>
+      <a href="blog.html">BLOG</a>
+      <a href="notificaciones.html">NOTIFICACIONES / BÚSQUEDA</a>
+    </nav>
+  </div>
+ </header>
+
+
+ <main class="blog-container">
+  <div class="container">
+    <h1 class="blog-title">Tendencias y Oportunidades Inmobiliarias</h1>
+  </div>
+
+    <!-- =======================================
+         LOADING BLOGS
+     ======================================= -->
+         <div id="loadingBlogs" class="loading-box" role="status" aria-live="polite">
+              <h2>Cargando Blogs…</h2>
+         </div>
+
+
+
+  <div class="container">
+    <table id="blogTable">
+      <thead>
+        <tr>
+          <th>Blog</th>
+          <th>Fecha</th>
+          <th>Resumen</th>
+          <th>Leer Más</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  </main>
+
+  <!-- MODAL -->
+  <div id="blogModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalTitle"></h2>
+      <p id="modalDate"></p>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  
+<script>
+const BLOG_ENDPOINT = "https://script.google.com/macros/s/AKfycbz8IamMmWTHZpeCBrp_4LoOfciihQJnThGFyDPkCotBo7waK38VJz167lHsIrB1eV79mw/exec";
+
+async function loadBlogs() {
+  const loading = document.getElementById("loadingBlogs");
+  const tableBody = document.querySelector("#blogTable tbody");
+
+  try {
+    // 🔥 PRENDER LOADING
+    loading.style.display = "block";
+
+    const response = await fetch(BLOG_ENDPOINT);
+    if (!response.ok) {
+      throw new Error(`HTTP error ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    tableBody.innerHTML = "";
+
+    data.forEach(post => {
+
+      // 👇 solo activos
+      if (String(post["Activo (si/no)"]).toLowerCase() !== "si") return;
+
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${post["Titulo"]}</td>
+        <td>${new Date(post["Fecha"]).toLocaleDateString("es-CO", {
+          year: 'numeric', month: 'long', day: 'numeric'
+        })}</td>
+        <td>${post["Resumen"]}</td>
+        <td>
+          <a href="articulo.html?codigo=${encodeURIComponent(post["CÓDIGO"])}"
+             class="readMoreBtn">
+             Leer Más
+          </a>
+        </td>
+      `;
+
+      tableBody.appendChild(row);
+    });
+
+  } catch (err) {
+    console.error("❌ Error cargando blogs:", err);
+
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="4" style="text-align:center; color:#d32f2f; padding:40px;">
+          Error al cargar los blogs. Intenta más tarde.
+        </td>
+      </tr>
+    `;
+
+  } finally {
+    // 🔒 APAGAR LOADING SIEMPRE
+    loading.style.display = "none";
+  }
+}
+
+// 🚀 EJECUTAR AL CARGAR LA PÁGINA
+loadBlogs();
+</script>
+
+
+<footer>
+  <div class="container footer-grid">
+    <div><h4>Contacto</h4><p>WhatsApp</p><p>Email</p></div>
+    <div><h4>Redes</h4><p>Instagram</p><p>LinkedIn</p></div>
+    <div>
+    <h4>Agente</h4>
+       <div class="agent-photo">
+          <img src="img/Foto-perfil.png" alt="Agente">
+             </div>
+              <p style="margin-top:5px; font-weight:bold;">María Patricia Renta</p>
+             </div>
+          </div>
+     <div class="footer-slogan">Conocimiento local. Estrategia inmobiliaria. Resultados reales.</div>
+   </footer>
+
+
+<script src="header.js"></script>
+
+</body>
+</html>
