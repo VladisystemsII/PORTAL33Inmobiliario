@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Detalle de Propiedad | PORTAL33</title>
+  <title>Detalle de Propiedad | PORTAL3.3</title>
   
   <!-- SEO Meta Tags -->
   <meta name="description" content="Detalle completo de la propiedad con fotos, características y precios.">
   <meta name="keywords" content="propiedades, inmuebles, venta, arriendo, residencial, comercial">
   
   <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="PORTAL33 | Detalle de Propiedad">
+  <meta property="og:title" content="PORTAL3.3 | Detalle de Propiedad">
   <meta property="og:description" content="Ver detalles completos de la propiedad">
   <meta property="og:image" content="img/logo-portal33Logo.png">
   <meta property="og:type" content="website">
@@ -29,7 +29,7 @@
 <header id="main-header">
   <div class="container nav">
     <div class="logo">
-      <img src="img/logo-portal33Logo.png" alt="Portal33 - Inmobiliaria">
+      <img src="img/logo-portal33Logo.png" alt="Portal3.3 - Inmobiliaria">
     </div>
     <nav class="menu">
       <a href="index.html">INICIO</a>
@@ -40,19 +40,18 @@
     </nav>
   </div>
 </header>
+
 <!-- =======================================
      CONTENIDO PRINCIPAL
      ======================================= -->
 <div class="detalle-container" id="detalleContainer">
 
+  <nav class="breadcrumb">
+    <a href="index.html">Inicio</a> &gt; 
+    <a href="propiedades.html">Propiedades</a> &gt; 
+    <span>Detalle</span>
+  </nav>
 
-    <nav class="breadcrumb">
-      <a href="index.html">Inicio</a> &gt; 
-      <a href="propiedades.html">Propiedades</a> &gt; 
-      <span>Detalle</span>
-    </nav>
-
-  
   <!-- Botón Volver -->
   <a href="propiedades.html" class="btn-volver">
     ← Volver al listado
@@ -174,25 +173,63 @@
 </footer>
 
 <!-- =======================================
-     JAVASCRIPT
+     JAVASCRIPT - CORREGIDO COMO ARTICULO.HTML
      ======================================= -->
 <script>
+  // ===== CONFIGURACIÓN =====
+  const PROPIEDADES_ENDPOINT = "https://script.google.com/macros/s/AKfycbyjwA8PvQpuKFcSR5D4o_NrP-Mg9C73lATGeC64I7s2wA2ZWcF8Htx1ez2LJhatHMSrOQ/exec";
   const WHATSAPP_NUMBER = "573001234567"; // ⚠️ CAMBIA ESTE NÚMERO
   
-  // ===== OBTENER DATOS DE LA PROPIEDAD DESDE localStorage =====
-  function cargarPropiedad() {
+  // ===== FUNCIÓN PRINCIPAL: Cargar Propiedad desde API =====
+  async function cargarPropiedad() {
+    const mensajeCarga = document.getElementById('mensajeCarga');
+    const contenidoPropiedad = document.getElementById('contenidoPropiedad');
+    
+    // Obtener código desde URL (igual que articulo.html)
+    const params = new URLSearchParams(window.location.search);
+    const codigo = params.get("codigo");
+    
+    if (!codigo) {
+      mostrarError('No se especificó el código de la propiedad');
+      return;
+    }
+    
+    console.log('🔍 Buscando propiedad con código:', codigo);
+    
     try {
-      const propiedadData = localStorage.getItem('propiedadSeleccionada');
+      // Mostrar loading
+      mensajeCarga.style.display = 'block';
+      contenidoPropiedad.style.display = 'none';
       
-      if (!propiedadData) {
-        mostrarError('No se encontró información de la propiedad');
+      // Hacer fetch al endpoint (igual que blog)
+      const response = await fetch(PROPIEDADES_ENDPOINT);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('✅ Datos recibidos:', data.length, 'propiedades');
+      
+      // Buscar la propiedad por código (igual que articulo.html busca por código)
+      const propiedad = data.find(p => 
+        p["CÓDIGO"]?.trim() === codigo.trim() &&
+        String(p["Activo (si/no)"]).toLowerCase() === "si"
+      );
+      
+      if (!propiedad) {
+        mostrarError('Propiedad no encontrada o inactiva');
         return;
       }
       
-      const propiedad = JSON.parse(propiedadData);
-      console.log('✅ Propiedad cargada:', propiedad);
+      console.log('✅ Propiedad encontrada:', propiedad["Título"]);
       
+      // Renderizar la propiedad
       renderizarPropiedad(propiedad);
+      
+      // Ocultar loading y mostrar contenido
+      mensajeCarga.style.display = 'none';
+      contenidoPropiedad.style.display = 'block';
       
     } catch (error) {
       console.error('❌ Error cargando propiedad:', error);
@@ -202,10 +239,6 @@
   
   // ===== RENDERIZAR TODA LA INFORMACIÓN =====
   function renderizarPropiedad(prop) {
-    // Ocultar mensaje de carga
-    document.getElementById('mensajeCarga').style.display = 'none';
-    document.getElementById('contenidoPropiedad').style.display = 'block';
-    
     // ===== TÍTULO Y UBICACIÓN =====
     document.getElementById('propTitulo').textContent = prop["Título"] || "Sin título";
     
@@ -259,12 +292,14 @@
     cargarGaleria(prop);
     
     // ===== BOTÓN WHATSAPP =====
-    document.getElementById('btnWhatsapp').addEventListener('click', () => {
+    const btnWhatsapp = document.getElementById('btnWhatsapp');
+    btnWhatsapp.onclick = () => {
       const titulo = prop["Título"] || "esta propiedad";
-      const mensaje = `Hola! Estoy interesado en ${titulo}`;
+      const codigoProp = prop["CÓDIGO"] || "";
+      const mensaje = `Hola! Estoy interesado en la propiedad *${codigoProp}*: ${titulo}`;
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
       window.open(url, '_blank');
-    });
+    };
   }
   
   // ===== NORMALIZAR URLs DE GOOGLE DRIVE =====
@@ -340,11 +375,12 @@
   
   // ===== MOSTRAR ERROR =====
   function mostrarError(mensaje) {
-    document.getElementById('mensajeCarga').innerHTML = `
-      <div class="mensaje-error">
-        <h2>⚠️ Error</h2>
-        <p>${mensaje}</p>
-        <a href="propiedades.html" class="btn-volver" style="display: inline-flex; margin: 0 auto;">
+    const mensajeCarga = document.getElementById('mensajeCarga');
+    mensajeCarga.innerHTML = `
+      <div class="mensaje-error" style="text-align: center; padding: 40px;">
+        <h2 style="color: #d32f2f; margin-bottom: 15px;">⚠️ ${mensaje}</h2>
+        <p style="color: #666; margin-bottom: 20px;">La propiedad que buscas no está disponible.</p>
+        <a href="propiedades.html" class="btn-volver" style="display: inline-flex; margin: 0 auto; position: static; transform: none;">
           ← Volver al listado
         </a>
       </div>
@@ -357,6 +393,7 @@
     cargarPropiedad();
   });
 </script>
+
 <script src="header.js"></script>
 </body>
 </html>
