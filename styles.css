@@ -1212,4 +1212,245 @@ main {
   min-height: calc(100vh - var(--header-height));
 }
 
+@media (max-width: 768px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
+
+@media (max-width: 768px) {
+  .sidebar-contacto {
+    position: static;
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .galeria-section {
+    margin-bottom: 20px;
+  }
+
+  .foto-principal {
+    height: 240px;
+  }
+
+  .thumbnails {
+    gap: 8px;
+  }
+}
+@media (max-width: 768px) {
+  .info-grid {
+    gap: 24px;
+  }
+
+  .sidebar-contacto {
+    margin-top: 20px;
+  }
+}
+/* =======================================
+   RESPONSIVE EXTRA – MOBILE FIRST
+   ======================================= */
+
+@media (max-width: 768px) {
+
+  header {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  .menu.mobile-activo {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #fff;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    padding: 20px;
+  }
+
+  .prop-card {
+    flex-direction: column;
+  }
+
+  .prop-card img {
+    width: 100%;
+    height: auto;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  h2 {
+    font-size: 1.1rem;
+  }
+
+  .precio {
+    font-size: 1.2rem;
+  }
+
+}
+/* =======================================
+   RESPONSIVE – DETALLE PROPIEDAD MOBILE
+   ======================================= */
+
+@media (max-width: 768px) {
+
+  .detalle-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .galeria {
+    order: 1;
+  }
+
+  .info-principal {
+    order: 2;
+  }
+
+  .sidebar-contacto {
+    order: 3;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .sidebar-contacto button {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .foto-principal {
+    height: 240px;
+  }
+
+  .caracteristicas {
+    grid-template-columns: 1fr;
+  }
+
+}
+/* =======================================
+   RESPONSIVE – HEADER Y NAVEGACIÓN
+   ======================================= */
+
+@media (max-width: 768px) {
+
+  .nav {
+    padding: 0 12px;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  .menu-mobile {
+    display: flex;
+    gap: 12px;
+  }
+
+  .logo img {
+    height: 44px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .nav {
+    height: 56px;
+  }
+
+  body {
+    padding-top: 56px;
+  }
+
+}
+/* =======================================
+   RESPONSIVE – FOOTER
+   ======================================= */
+
+@media (max-width: 768px) {
+
+  footer .container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    text-align: center;
+  }
+
+  footer ul {
+    padding: 0;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  footer {
+    font-size: 0.85rem;
+  }
+
+}
+/* =======================================
+   RESPONSIVE – HEADER / NAV
+   ======================================= */
+
+@media (max-width: 768px) {
+
+  .menu {
+    display: none;
+  }
+
+  .menu-mobile {
+    display: block;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .logo img {
+    height: 42px;
+  }
+
+}
+/* =======================================
+   RESPONSIVE – DETALLE PROPIEDAD (MÓVIL)
+   ======================================= */
+
+@media (max-width: 480px) {
+
+  .foto-principal {
+    height: 220px;
+  }
+
+  .caracteristicas {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-contacto {
+    margin-top: 30px;
+  }
+
+}
