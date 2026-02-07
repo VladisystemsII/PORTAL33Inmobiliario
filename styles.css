@@ -254,7 +254,8 @@ header {
 
 /* HERO en página de propiedades con subnav */
 .property-subnav + .hero {
-  padding-top: 120px; /* Espacio para header + subnav */
+  padding-top: 120px; /* Espacio para header + subnav en desktop */
+  margin-top: 0;
 }
 
 .hero-grid {
@@ -1171,9 +1172,10 @@ button:focus-visible {
   
   /* PROPERTY SUBNAV */
   .property-subnav {
+    position: relative; /* CAMBIO: No sticky en móvil */
     height: auto;
     min-height: 50px;
-    top: 60px;
+    top: 0;
     padding: 10px 0;
   }
   
@@ -1193,9 +1195,9 @@ button:focus-visible {
     padding: 60px 0 50px;
   }
   
-  /* HERO en propiedades con subnav móvil */
+  /* HERO en propiedades - ya no necesita padding extra */
   .property-subnav + .hero {
-    padding-top: 140px; /* header 60px + subnav ~80px */
+    padding-top: 40px; /* Espaciado normal */
   }
   
   .hero h1 {
@@ -1366,9 +1368,9 @@ button:focus-visible {
     padding: 50px 0 40px;
   }
   
-  /* HERO en propiedades con subnav móvil */
+  /* HERO en propiedades - espaciado normal sin subnav sticky */
   .property-subnav + .hero {
-    padding-top: 130px; /* Ajuste para móvil pequeño */
+    padding-top: 30px;
   }
   
   .hero h1 {
