@@ -1026,6 +1026,8 @@ button:focus-visible {
   }
 }
 
+
+
 /* =======================================
    RESPONSIVE DESIGN - CONSOLIDADO Y ORDENADO
    ======================================= */
@@ -1080,6 +1082,12 @@ button:focus-visible {
   .menu {
     display: none;
   }
+
+  .menu.mobile-open {
+    position: relative;
+    top: 0;
+  }
+
   
   /* HAMBURGER MENU BUTTON */
   .menu-toggle {
