@@ -1434,6 +1434,13 @@ button:focus-visible {
   }
 }
 
+@media (max-width: 768px) {
+  body {
+    padding-top: 0 !important;
+  }
+}
+
+
   
   /* FOOTER */
   footer {
