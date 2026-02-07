@@ -1466,10 +1466,5 @@ button:focus-visible {
   }
 }
 
-@media (max-width: 768px) {
-  .property-subnav {
-    position: static;
-  }
-}
 
 
