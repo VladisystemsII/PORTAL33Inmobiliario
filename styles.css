@@ -1465,3 +1465,10 @@ button:focus-visible {
     font-size: 0.95rem;
   }
 }
+
+@media (max-width: 768px) {
+  .property-subnav {
+    position: relative;
+    top: 0;
+  }
+}
