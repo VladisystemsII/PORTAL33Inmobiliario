@@ -1472,3 +1472,11 @@ button:focus-visible {
     top: 0;
   }
 }
+
+
+@media (max-width: 768px) {
+  .hero {
+    margin-top: 80px;
+  }
+}
+
