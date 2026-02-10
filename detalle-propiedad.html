@@ -19,9 +19,6 @@
   <!-- CSS -->
   <link rel="stylesheet" href="styles.css">
 </head>
-<script src="header.js"></script>
-<script src="menu-mobile.js"></script> <!-- NUEVO -->
-
 
 <body>
 
@@ -321,25 +318,43 @@
     const fotosArray = [];
     
     // Recopilar todas las fotos (Foto 1 hasta Foto 8)
+    console.log('🖼️ Buscando fotos en la propiedad...');
+    
     for (let i = 1; i <= 8; i++) {
       const fotoKey = `Foto ${i}`;
-      if (prop[fotoKey]) {
-        const fotoNormalizada = normalizarFoto(prop[fotoKey]);
+      const fotoURL = prop[fotoKey];
+      
+      console.log(`Foto ${i}:`, fotoURL ? '✅ Encontrada' : '❌ No encontrada');
+      
+      if (fotoURL && fotoURL.trim() !== '') {
+        const fotoNormalizada = normalizarFoto(fotoURL);
         if (fotoNormalizada) {
-          fotosArray.push(fotoNormalizada);
+          fotosArray.push({
+            original: fotoURL,
+            normalizada: fotoNormalizada,
+            numero: i
+          });
+          console.log(`  → Normalizada: ${fotoNormalizada}`);
         }
       }
     }
     
+    console.log(`📊 Total de fotos encontradas: ${fotosArray.length}`);
+    
     // Si no hay fotos, usar placeholder
     if (fotosArray.length === 0) {
-      fotosArray.push('https://via.placeholder.com/1200x800?text=Sin+Imagen');
+      console.warn('⚠️ No se encontraron fotos, usando placeholder');
+      fotosArray.push({
+        normalizada: 'https://via.placeholder.com/1200x800?text=Sin+Imagen',
+        numero: 1
+      });
     }
     
     // Establecer foto principal
     const imgPrincipal = document.getElementById('imgPrincipal');
-    imgPrincipal.src = fotosArray[0];
+    imgPrincipal.src = fotosArray[0].normalizada;
     imgPrincipal.onerror = function() {
+      console.error('❌ Error cargando foto principal');
       this.src = 'https://via.placeholder.com/1200x800?text=Sin+Imagen';
     };
     
@@ -352,18 +367,27 @@
       thumbnail.className = 'thumbnail' + (index === 0 ? ' active' : '');
       
       const img = document.createElement('img');
-      img.src = foto;
-      img.alt = `Foto ${index + 1}`;
+      img.src = foto.normalizada;
+      img.alt = `Foto ${foto.numero}`;
+      img.loading = 'lazy'; // Lazy loading para mejor performance
+      
       img.onerror = function() {
-        this.src = 'https://via.placeholder.com/400x300?text=Sin+Imagen';
+        console.error(`❌ Error cargando thumbnail ${foto.numero}`);
+        this.src = 'https://via.placeholder.com/400x300?text=Error+Foto+' + foto.numero;
+      };
+      
+      img.onload = function() {
+        console.log(`✅ Thumbnail ${foto.numero} cargado correctamente`);
       };
       
       thumbnail.appendChild(img);
       
       // Click en thumbnail cambia foto principal
       thumbnail.addEventListener('click', () => {
+        console.log(`🖱️ Click en foto ${foto.numero}`);
+        
         // Cambiar foto principal
-        document.getElementById('imgPrincipal').src = foto;
+        document.getElementById('imgPrincipal').src = foto.normalizada;
         
         // Actualizar clase active
         document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
@@ -373,7 +397,7 @@
       thumbnailsContainer.appendChild(thumbnail);
     });
     
-    console.log(`✅ Galería cargada con ${fotosArray.length} foto(s)`);
+    console.log(`✅ Galería renderizada con ${fotosArray.length} foto(s)`);
   }
   
   // ===== MOSTRAR ERROR =====
