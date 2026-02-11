@@ -735,12 +735,14 @@ h1.blog-title {
 
 .foto-principal {
   width: 100%;
-  height: 500px;
+  aspect-ratio: 4 / 3;
   border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: var(--shadow-xl);
   margin-bottom: 20px;
   background: var(--color-gray-light);
+  position: relative;
+  min-height: 300px; /* AGREGADO: altura mínima */
 }
 
 .foto-principal img {
@@ -748,6 +750,9 @@ h1.blog-title {
   height: 100%;
   object-fit: cover;
   display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .thumbnails {
@@ -757,13 +762,15 @@ h1.blog-title {
 }
 
 .thumbnail {
-  height: 100px;
+  aspect-ratio: 1 / 1;
   border-radius: var(--border-radius-sm);
   overflow: hidden;
   cursor: pointer;
   border: 3px solid transparent;
   transition: all 0.3s ease;
   background: var(--color-gray-light);
+  position: relative;
+  min-height: 100px; /* AGREGADO: altura mínima */
 }
 
 .thumbnail:hover {
@@ -781,6 +788,9 @@ h1.blog-title {
   height: 100%;
   object-fit: cover;
   display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* Grid de información */
