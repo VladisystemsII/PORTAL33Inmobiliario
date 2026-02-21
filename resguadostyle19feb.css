@@ -735,13 +735,14 @@ h1.blog-title {
 
 .foto-principal {
   width: 100%;
-  padding-top: 75%; /* 4:3 aspect ratio = 75% */
+  aspect-ratio: 4 / 3;
   border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: var(--shadow-xl);
   margin-bottom: 20px;
   background: var(--color-gray-light);
   position: relative;
+  min-height: 300px; /* AGREGADO: altura mínima */
 }
 
 .foto-principal img {
@@ -761,7 +762,7 @@ h1.blog-title {
 }
 
 .thumbnail {
-  padding-top: 100%; /* 1:1 aspect ratio = 100% */
+  aspect-ratio: 1 / 1;
   border-radius: var(--border-radius-sm);
   overflow: hidden;
   cursor: pointer;
@@ -769,6 +770,7 @@ h1.blog-title {
   transition: all 0.3s ease;
   background: var(--color-gray-light);
   position: relative;
+  min-height: 100px; /* AGREGADO: altura mínima */
 }
 
 .thumbnail:hover {
@@ -1297,11 +1299,12 @@ button:focus-visible {
     gap: 20px;
   }
   
-/* FOTO PRINCIPAL EN MÓVIL */
-.foto-principal {
-  padding-top: 56.25%; /* 16:9 */
-}
-
+  /* FOTO PRINCIPAL EN MÓVIL */
+  .foto-principal {
+    aspect-ratio: 16 / 9; /* Más ancho para móvil */
+    height: auto;
+    max-height: 350px;
+  }
   
   .foto-principal img {
     object-fit: cover; /* Asegura que llene el espacio */
@@ -1426,10 +1429,12 @@ button:focus-visible {
   }
   
   /* FOTO PRINCIPAL EN MÓVIL PEQUEÑO */
-.foto-principal {
-  padding-top: 56.25%; /* Mantiene 16:9 */
-}
-
+  .foto-principal {
+    aspect-ratio: 4 / 3; /* Mantiene proporción 4:3 */
+    height: auto;
+    min-height: 250px;
+    max-height: 300px;
+  }
   
   .foto-principal img {
     object-fit: cover;

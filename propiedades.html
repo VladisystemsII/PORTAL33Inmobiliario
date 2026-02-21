@@ -18,6 +18,14 @@
   
   <!-- CSS -->
   <link rel="stylesheet" href="styles.css">
+
+
+
+
+
+
+
+
 </head>
 
 <body>
@@ -129,25 +137,28 @@
   // Cache para evitar múltiples requests
   let cachedProperties = null;
 
-  // ===== FUNCIÓN: Normalizar URLs de Google Drive =====
-  function normalizarFoto(url) {
-    if (!url) return "img/default.png";
-
-    // Buscar el ID en diferentes formatos de URL de Drive
-    let m = url.match(/id=([a-zA-Z0-9_-]+)/);
-    if (!m) m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-    if (!m) return url;
-
-    // Retornar URL optimizada para thumbnails
-    return "https://drive.google.com/thumbnail?id=" + m[1] + "&sz=w1200";
+ <script>
+// ===== FUNCIÓN: Normalizar URLs de Google Drive =====
+function normalizarFoto(url) {
+  if (!url || url.trim() === '') return "img/default.png";
+  
+  url = url.trim();
+  
+  // Extraer ID de la URL
+  let match = url.match(/id=([a-zA-Z0-9_-]+)/);
+  if (!match) {
+    match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
   }
-
-  // ===== FUNCIÓN: Sanitizar texto para prevenir XSS =====
-  function sanitizeText(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+  
+  if (match) {
+    let fileId = match[1];
+    // URL que SÍ funciona en móvil
+    return `https://lh3.googleusercontent.com/d/${fileId}`;
   }
+  
+  return "img/default.png";
+}
+</script>
 
   // ===== FUNCIÓN PRINCIPAL: Cargar y Filtrar Propiedades =====
   async function loadProperties(tipoFiltro = null, operacionFiltro = null) {
