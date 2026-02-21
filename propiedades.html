@@ -268,15 +268,14 @@
   }
   
   // ===== NORMALIZAR URLs DE GOOGLE DRIVE =====
-  function normalizarFoto(url) {
+ function normalizarFoto(url) {
   if (!url) return null;
   
   let m = url.match(/id=([a-zA-Z0-9_-]+)/);
   if (!m) m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
   if (!m) return url;
   
-  // Formato más confiable
-  return "https://lh3.googleusercontent.com/d/" + m[1];
+  return "https://lh3.googleusercontent.com/d/" + m[1] + "=w1200";
 }
   
   // ===== CARGAR GALERÍA DE FOTOS =====
