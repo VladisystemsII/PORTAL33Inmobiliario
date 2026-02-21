@@ -1,6 +1,6 @@
 /* =======================================
    CSS GLOBAL - Portal 33 FINAL
-   Versión limpia y optimizada con RESPONSIVE CORREGIDO
+   Versión limpia y optimizada
    ======================================= */
 
 /* ===== VARIABLES CSS PARA CONSISTENCIA ===== */
@@ -55,7 +55,6 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--header-height);
   width: 100%;
-  overflow-x: hidden;
 }
 
 body {
@@ -65,9 +64,8 @@ body {
   line-height: 1.6;
   padding-top: var(--header-height);
   width: 100%;
-  overflow-x: hidden;
   position: relative;
-}
+  }
 
 /* Control específico de desbordamiento horizontal */
 .container,
@@ -129,12 +127,18 @@ header {
   align-items: center;
 }
 
+
+
 .menu a {
   position: relative;
   display: inline-block;
   padding-bottom: 6px;
   font-weight: 500;
 }
+
+
+
+
 
 .menu a:hover {
   color: var(--color-black);
@@ -150,9 +154,11 @@ header {
   background: var(--color-black);
 }
 
+
 /* =======================================
-   BOTON COMENZAR AHORA EN INICIO
+   BOTON COMENZAR AHORA  EN INICIO
    ======================================= */
+
 #publicar {
   background-color: #000;
   text-align: center;
@@ -179,6 +185,8 @@ header {
   background-color: #eaeaea;
   transform: scale(1.05);
 }
+
+
 
 /* =======================================
    SUBHEADER PROPIEDADES
@@ -250,12 +258,6 @@ header {
   background: var(--color-white);
   padding: 90px 0 var(--section-padding);
   text-align: center;
-}
-
-/* HERO en página de propiedades con subnav */
-.property-subnav + .hero {
-  padding-top: 120px; /* Espacio para header + subnav en desktop */
-  margin-top: 0;
 }
 
 .hero-grid {
@@ -452,12 +454,19 @@ footer h4 {
   font-size: 1.1rem;
 }
 
+
+
 .agent-photo img {
   width: 80%;
   height: 80%;
   object-fit: cover;
   border-radius: 50%;
 }
+
+
+
+
+
 
 .footer-slogan {
   text-align: center;
@@ -601,8 +610,8 @@ footer h4 {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
-
-/* =======================================
+/*
+ =======================================
    BLOG - TABLA CONVERTIDA EN GRID
    ======================================= */
 h1.blog-title {
@@ -681,6 +690,9 @@ h1.blog-title {
   background-color: #0056b3;
 }
 
+
+
+
 /* =======================================
    FORMULARIO GOOGLE - IFRAME
    ======================================= */
@@ -702,20 +714,42 @@ h1.blog-title {
 /* =======================================
    DETALLE DE PROPIEDAD
    ======================================= */
+
+/* Contenedor principal del detalle */
 .detalle-container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 20px var(--spacing-md) 40px;
 }
 
+.btn-volver {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #d9dcde;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.btn-volver:hover {
+  background-color: #0056b3;
+}
+
+
 .breadcrumb {
-  height: 40px;
+  height: 40px;               /* altura de la franja */
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 20px;
+  align-items: center;        /* centra verticalmente */
+  gap: 8px;                   /* espacio entre links */
+  padding: 0 20px;            /* espacio a los lados */
   font-size: 0.95rem;
-  background: #f6f6f6;
+  background: #f6f6f6;        /* gris claro */
   color: #111;
 }
 
@@ -728,6 +762,12 @@ h1.blog-title {
   text-decoration: underline;
 }
 
+
+
+
+
+
+
 /* Galería de fotos */
 .galeria-section {
   margin-bottom: 40px;
@@ -735,13 +775,12 @@ h1.blog-title {
 
 .foto-principal {
   width: 100%;
-  padding-top: 75%; /* 4:3 aspect ratio = 75% */
+  height: 500px;
   border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: var(--shadow-xl);
   margin-bottom: 20px;
   background: var(--color-gray-light);
-  position: relative;
 }
 
 .foto-principal img {
@@ -749,9 +788,6 @@ h1.blog-title {
   height: 100%;
   object-fit: cover;
   display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 .thumbnails {
@@ -761,14 +797,13 @@ h1.blog-title {
 }
 
 .thumbnail {
-  padding-top: 100%; /* 1:1 aspect ratio = 100% */
+  height: 100px;
   border-radius: var(--border-radius-sm);
   overflow: hidden;
   cursor: pointer;
   border: 3px solid transparent;
   transition: all 0.3s ease;
   background: var(--color-gray-light);
-  position: relative;
 }
 
 .thumbnail:hover {
@@ -786,9 +821,6 @@ h1.blog-title {
   height: 100%;
   object-fit: cover;
   display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 /* Grid de información */
@@ -1004,68 +1036,19 @@ h1.blog-title {
 }
 
 /* =======================================
-   FIX BRINCO BLOG / ARTICULO
+   UTILIDADES
    ======================================= */
-.blog-container {
-  min-height: calc(100vh - var(--header-height));
-}
 
-main {
-  display: block;
-  min-height: calc(100vh - var(--header-height));
+/* Close button específico */
+.prop-modal .close,
+#property-modal .close {
+  display: none;
 }
 
 /* =======================================
-   ACCESIBILIDAD
-   ======================================= */
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--color-dark);
-  outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-@media (prefers-contrast: high) {
-  :root {
-    --color-border: #000;
-    --shadow-sm: 0 2px 4px rgba(0,0,0,0.5);
-    --shadow-md: 0 4px 8px rgba(0,0,0,0.5);
-  }
-}
-
-/* =======================================
-   RESPONSIVE DESIGN - CONSOLIDADO Y ORDENADO
+   RESPONSIVE DESIGN
    ======================================= */
 
-/* TABLETS (768px - 1024px) */
-@media (max-width: 1024px) {
-  .container {
-    padding: 0 20px;
-  }
-  
-  .property-subnav .container {
-    gap: 40px;
-  }
-  
-  .info-grid {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-  
-  .sidebar-contacto {
-    position: static;
-    margin-top: 20px;
-  }
-}
-
-/* MOBILE LANDSCAPE & TABLETS SMALL (768px) */
 @media (max-width: 768px) {
   :root {
     --header-height: 60px;
@@ -1076,136 +1059,26 @@ button:focus-visible {
     padding-top: 60px;
   }
   
-  /* HEADER RESPONSIVE */
-  header {
-    height: 60px;
-  }
-  
   .nav {
     height: 60px;
-    padding: 0 15px;
   }
   
   .logo img {
     height: 50px;
   }
   
-  /* MENU RESPONSIVE - OCULTAR EN MÓVIL */
   .menu {
-    display: none;
+    gap: 16px;
+    font-size: 0.85rem;
   }
   
-  /* HAMBURGER MENU BUTTON */
-  .menu-toggle {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 30px;
-    height: 25px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 1001;
-    transition: all 0.3s ease;
-  }
-  
-  .menu-toggle span {
-    width: 100%;
-    height: 3px;
-    background: var(--color-dark);
-    border-radius: 10px;
-    transition: all 0.3s ease;
-    transform-origin: center;
-  }
-  
-  /* ANIMACIÓN HAMBURGER A X */
-  .menu-toggle.active span:nth-child(1) {
-    transform: rotate(45deg) translateY(10px);
-  }
-  
-  .menu-toggle.active span:nth-child(2) {
-    opacity: 0;
-  }
-  
-  .menu-toggle.active span:nth-child(3) {
-    transform: rotate(-45deg) translateY(-10px);
-  }
-  
-  /* MENU MOBILE DESPLEGABLE */
-  .menu.mobile-open {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 60px;
-    left: 0;
-    right: 0;
-    background: var(--color-white);
-    padding: 20px;
-    gap: 20px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    z-index: 999;
-    animation: slideDown 0.3s ease;
-    max-height: calc(100vh - 60px);
-    overflow-y: auto;
-  }
-  
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .menu.mobile-open a {
-    padding: 12px 0;
-    border-bottom: 1px solid var(--color-border-light);
-    font-size: 1rem;
-    font-weight: 600;
-  }
-  
-  .menu.mobile-open a:last-child {
-    border-bottom: none;
-  }
-  
-  .menu.mobile-open a:hover {
-    color: var(--color-black);
-    padding-left: 10px;
-    transition: all 0.3s ease;
-  }
-  
-  /* PROPERTY SUBNAV */
   .property-subnav {
-    position: relative; /* CAMBIO: No sticky en móvil */
-    height: auto;
-    min-height: 50px;
-    top: 0;
-    padding: 10px 0;
+    height: 50px;
+    top: 60px;
   }
   
   .property-subnav .container {
-    flex-direction: column;
-    gap: 15px;
-    padding: 10px 15px;
-  }
-  
-  .property-subnav .subnav-group {
-    width: 100%;
-    justify-content: center;
-  }
-  
-  /* HERO */
-  .hero {
-    padding: 60px 0 50px;
-  }
-  
-  /* HERO en propiedades - ya no necesita padding extra */
-  .property-subnav + .hero {
-    padding-top: 40px; /* Espaciado normal */
+    gap: var(--spacing-lg);
   }
   
   .hero h1 {
@@ -1216,53 +1089,17 @@ button:focus-visible {
     font-size: 0.95rem;
   }
   
-  .hero-ui {
-    aspect-ratio: 4 / 3;
-  }
-  
-  /* SECTIONS */
-  section {
-    padding: 50px 0;
-  }
-  
   section h2 {
     font-size: 1.6rem;
-    margin-bottom: 30px;
   }
   
-  /* BASES LIST */
   .bases-list {
     grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  /* CARDS FORMA DE TRABAJAR */
-  #forma-de-trabajar .grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  /* PROPIEDADES GRID */
-  .prop-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  .prop-card {
-    max-width: 100%;
-    min-width: 100%;
-  }
-  
-  /* BLOG TABLE - STACK VERTICAL */
-  h1.blog-title {
-    margin: 70px auto 30px auto;
-    font-size: 1.6rem;
   }
   
   #blogTable {
     grid-template-columns: 1fr;
-    row-gap: 30px;
-    padding: 0 15px;
+    row-gap: 24px;
   }
   
   #blogTable th {
@@ -1270,8 +1107,7 @@ button:focus-visible {
   }
   
   #blogTable td {
-    padding: 8px 0;
-    font-size: 0.9rem;
+    padding: var(--spacing-xs) 0;
   }
   
   #blogTable td::before {
@@ -1282,228 +1118,339 @@ button:focus-visible {
     color: var(--color-dark);
   }
   
-  /* DETALLE PROPIEDAD */
-  .detalle-container {
-    padding: 15px 15px 40px;
-  }
-  
-  .breadcrumb {
-    font-size: 0.85rem;
-    padding: 0 15px;
-  }
-  
+  /* Detalle de propiedad responsive */
   .info-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
   }
   
-/* FOTO PRINCIPAL EN MÓVIL */
-.foto-principal {
-  padding-top: 56.25%; /* 16:9 */
-}
-
+  .sidebar-contacto {
+    position: static;
+  }
   
-  .foto-principal img {
-    object-fit: cover; /* Asegura que llene el espacio */
+  .foto-principal {
+    height: 300px;
   }
   
   .thumbnails {
-    grid-template-columns: repeat(4, 1fr); /* 4 columnas fijas */
-    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
   }
   
   .thumbnail {
-    aspect-ratio: 1 / 1; /* Cuadrados en móvil */
-    height: auto;
+    height: 80px;
   }
   
   .caracteristicas {
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-  
-  .info-principal {
-    padding: 20px;
   }
   
   .info-principal h1 {
     font-size: 1.5rem;
   }
   
-  .sidebar-contacto {
-    padding: 20px;
-  }
-  
   .precio-principal {
-    font-size: 1.5rem;
-  }
-  
-  /* FOOTER */
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-  
-  footer {
-    padding: 40px 0;
-  }
-  
-  .footer-slogan {
-    font-size: 0.95rem;
-    margin-top: 30px;
-  }
-  
-  /* CTA */
-  .cta {
-    padding: 50px 20px;
-  }
-  
-  .cta h2 {
     font-size: 1.5rem;
   }
 }
 
-/* MOBILE (480px) */
 @media (max-width: 480px) {
   .container {
-    padding: 0 12px;
+    padding: 0 15px;
   }
   
-  /* HEADER */
-  .nav {
-    padding: 0 12px;
-  }
-  
-  .logo img {
-    height: 45px;
-  }
-  
-  /* HERO */
-  .hero {
-    padding: 50px 0 40px;
-  }
-  
-  /* HERO en propiedades - espaciado normal sin subnav sticky */
-  .property-subnav + .hero {
-    padding-top: 30px;
-  }
-  
-  .hero h1 {
-    font-size: 1.5rem;
-  }
-  
-  .hero-subtitle {
-    font-size: 0.9rem;
+  .prop-grid {
+    grid-template-columns: 1fr;
   }
   
   .hero-ui {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 3;
   }
-  
-  /* SECTIONS */
-  section h2 {
-    font-size: 1.4rem;
-  }
-  
-  /* PROPIEDADES */
-  .prop-card {
-    min-width: 100%;
-  }
-  
-  /* BLOG */
-  h1.blog-title {
-    font-size: 1.4rem;
-    margin: 60px auto 25px auto;
-  }
-  
-  #blogTable {
-    padding: 0 12px;
-  }
-  
-  /* DETALLE PROPIEDAD */
-  .detalle-container {
-    padding: 12px 12px 40px;
-  }
-  
-  /* FOTO PRINCIPAL EN MÓVIL PEQUEÑO */
-.foto-principal {
-  padding-top: 56.25%; /* Mantiene 16:9 */
 }
 
-  
-  .foto-principal img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
+/* =======================================
+   ACCESIBILIDAD
+   ======================================= */
+
+/* Focus visible para navegación por teclado */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-dark);
+  outline-offset: 2px;
+}
+
+/* Reducción de movimiento para usuarios sensibles */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-  
-  .thumbnails {
-    grid-template-columns: repeat(4, 1fr); /* 4 thumbnails por fila */
-    gap: 6px;
+}
+
+/* Alto contraste */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: #000;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.5);
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.5);
   }
-  
-  .thumbnail {
-    aspect-ratio: 1 / 1;
-    height: auto;
-    min-height: 70px;
-  }
-  
-  .thumbnail img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .caracteristicas {
+}
+
+body {
+  position: static !important;
+  top: auto !important;
+}
+
+
+/* FIX BRINCO BLOG */
+.blog-container {
+  min-height: calc(100vh - var(--header-height));
+}
+
+/* FIX DEFINITIVO BRINCO BLOG / ARTICULO */
+main {
+  display: block;
+  min-height: calc(100vh - var(--header-height));
+}
+
+@media (max-width: 768px) {
+  .info-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .sidebar-contacto {
+    position: static;
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .galeria-section {
+    margin-bottom: 20px;
+  }
+
+  .foto-principal {
+    height: 240px;
+  }
+
+  .thumbnails {
+    gap: 8px;
+  }
+}
+@media (max-width: 768px) {
+  .info-grid {
+    gap: 24px;
+  }
+
+  .sidebar-contacto {
+    margin-top: 20px;
+  }
+}
+/* =======================================
+   RESPONSIVE EXTRA – MOBILE FIRST
+   ======================================= */
+
+@media (max-width: 768px) {
+
+  header {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  .menu.mobile-activo {
+    display: flex;
+    flex-direction: column;
     gap: 12px;
+    background: #fff;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    padding: 20px;
   }
-  
-  .caracteristica-item .icono {
-    font-size: 1.5rem;
+
+  .prop-card {
+    flex-direction: column;
   }
-  
-  .caracteristica-item .valor {
+
+  .prop-card img {
+    width: 100%;
+    height: auto;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  h2 {
+    font-size: 1.1rem;
+  }
+
+  .precio {
     font-size: 1.2rem;
   }
-  
-  .info-principal h1 {
-    font-size: 1.3rem;
+
+}
+/* =======================================
+   RESPONSIVE – DETALLE PROPIEDAD MOBILE
+   ======================================= */
+
+@media (max-width: 768px) {
+
+  .detalle-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
-  
-  .precio-principal {
-    font-size: 1.3rem;
+
+  .galeria {
+    order: 1;
   }
-  
-  /* FOOTER */
+
+  .info-principal {
+    order: 2;
+  }
+
+  .sidebar-contacto {
+    order: 3;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .sidebar-contacto button {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .foto-principal {
+    height: 240px;
+  }
+
+  .caracteristicas {
+    grid-template-columns: 1fr;
+  }
+
+}
+/* =======================================
+   RESPONSIVE – HEADER Y NAVEGACIÓN
+   ======================================= */
+
+@media (max-width: 768px) {
+
+  .nav {
+    padding: 0 12px;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  .menu-mobile {
+    display: flex;
+    gap: 12px;
+  }
+
+  .logo img {
+    height: 44px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .nav {
+    height: 56px;
+  }
+
+  body {
+    padding-top: 56px;
+  }
+
+}
+/* =======================================
+   RESPONSIVE – FOOTER
+   ======================================= */
+
+@media (max-width: 768px) {
+
+  footer .container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    text-align: center;
+  }
+
+  footer ul {
+    padding: 0;
+  }
+
+}
+
+@media (max-width: 480px) {
+
   footer {
-    padding: 30px 0;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
-  
-  .footer-slogan {
-    font-size: 0.9rem;
+
+}
+/* =======================================
+   RESPONSIVE – HEADER / NAV
+   ======================================= */
+
+@media (max-width: 768px) {
+
+  .menu {
+    display: none;
   }
-  
-  /* BTN VOLVER */
-  .btn-volver {
-    bottom: 15px;
-    right: 15px;
-    padding: 10px 16px;
-    font-size: 0.9rem;
+
+  .menu-mobile {
+    display: block;
   }
-  
-  /* CTA */
-  .cta {
-    padding: 40px 15px;
+
+}
+
+@media (max-width: 480px) {
+
+  .logo img {
+    height: 42px;
   }
-  
-  .cta h2 {
-    font-size: 1.3rem;
+
+}
+/* =======================================
+   RESPONSIVE – DETALLE PROPIEDAD (MÓVIL)
+   ======================================= */
+
+@media (max-width: 480px) {
+
+  .foto-principal {
+    height: 220px;
   }
-  
-  .cta button {
-    padding: 12px 20px;
-    font-size: 0.95rem;
+
+  .caracteristicas {
+    grid-template-columns: 1fr;
   }
+
+  .sidebar-contacto {
+    margin-top: 30px;
+  }
+
 }
