@@ -137,28 +137,16 @@
   // Cache para evitar múltiples requests
   let cachedProperties = null;
 
- <script>
-// ===== FUNCIÓN: Normalizar URLs de Google Drive =====
-function normalizarFoto(url) {
-  if (!url || url.trim() === '') return "img/default.png";
-  
-  url = url.trim();
-  
-  // Extraer ID de la URL
-  let match = url.match(/id=([a-zA-Z0-9_-]+)/);
-  if (!match) {
-    match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+   // ===== NORMALIZAR URLs DE GOOGLE DRIVE =====
+  function normalizarFoto(url) {
+    if (!url) return null;
+    
+    let m = url.match(/id=([a-zA-Z0-9_-]+)/);
+    if (!m) m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (!m) return url;
+    
+    return "https://drive.google.com/thumbnail?id=" + m[1] + "&sz=w1200";
   }
-  
-  if (match) {
-    let fileId = match[1];
-    // URL que SÍ funciona en móvil
-    return `https://lh3.googleusercontent.com/d/${fileId}`;
-  }
-  
-  return "img/default.png";
-}
-</script>
 
   // ===== FUNCIÓN PRINCIPAL: Cargar y Filtrar Propiedades =====
   async function loadProperties(tipoFiltro = null, operacionFiltro = null) {
