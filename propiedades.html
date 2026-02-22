@@ -10,21 +10,35 @@
   <meta name="description" content="Detalle completo de la propiedad con fotos, características y precios.">
   <meta name="keywords" content="propiedades, inmuebles, venta, arriendo, residencial, comercial">
   
-  <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="PORTAL3.3 | Detalle de Propiedad">
-  <meta property="og:description" content="Ver detalles completos de la propiedad">
-  <meta property="og:image" content="img/logo-portal33Logo.png">
-  <meta property="og:type" content="website">
-  
   <!-- CSS -->
   <link rel="stylesheet" href="styles.css">
+  
+  <!-- Estilos de Emergencia para Mensajes -->
+  <style>
+    .mensaje-error {
+      text-align: center;
+      padding: 40px 20px;
+      background: #fff0f0;
+      border: 1px solid #ffcccc;
+      border-radius: 8px;
+      color: #cc0000;
+      max-width: 600px;
+      margin: 40px auto;
+    }
+    .mensaje-carga { text-align: center; padding: 50px 20px; }
+    .loading-box {
+      width: 40px; height: 40px;
+      border: 4px solid #f3f3f3; border-top: 4px solid #3498db;
+      border-radius: 50%; animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
 </head>
 
 <body>
 
-<!-- =======================================
-     HEADER - NAVEGACIÓN PRINCIPAL
-     ======================================= -->
+<!-- HEADER -->
 <header>
   <div class="container nav">
     <div class="logo">
@@ -40,23 +54,16 @@
   </div>
 </header>
 
-<!-- =======================================
-     CONTENIDO PRINCIPAL
-     ======================================= -->
+<!-- CONTENIDO PRINCIPAL -->
 <div class="detalle-container" id="detalleContainer">
   
-  <!-- Botón Volver -->
-  <a href="propiedades.html" class="btn-volver">
-    ← Volver al listado
-  </a>
+  <a href="propiedades.html" class="btn-volver">← Volver al listado</a>
   
-  <!-- Mensaje de carga inicial -->
   <div class="mensaje-carga" id="mensajeCarga">
     <h2>Cargando información de la propiedad...</h2>
-    <div class="loading-box" style="position: static; transform: none; margin: 20px auto;"></div>
+    <div class="loading-box"></div>
   </div>
   
-  <!-- Contenido de la propiedad (se llena con JavaScript) -->
   <div id="contenidoPropiedad" style="display: none;">
     
     <!-- Galería de Fotos -->
@@ -70,7 +77,6 @@
     <!-- Grid de Información -->
     <div class="info-grid">
       
-      <!-- Información Principal -->
       <div class="info-principal">
         <h1 id="propTitulo">Título de la propiedad</h1>
         <div class="ubicacion">
@@ -79,7 +85,6 @@
         </div>
         <div class="tipo-badge" id="propTipo">Tipo</div>
         
-        <!-- Características Principales -->
         <div class="caracteristicas">
           <div class="caracteristica-item">
             <span class="icono">📐</span>
@@ -103,7 +108,6 @@
           </div>
         </div>
         
-        <!-- Descripción -->
         <div class="descripcion-section">
           <h3>Descripción</h3>
           <p id="propDescripcion">Descripción de la propiedad...</p>
@@ -142,14 +146,10 @@
       </div>
       
     </div>
-    
   </div>
-  
 </div>
 
-<!-- =======================================
-     FOOTER
-     ======================================= -->
+<!-- FOOTER -->
 <footer>
   <div class="container footer-grid">
     <div>
@@ -173,66 +173,105 @@
   </div>
 </footer>
 
-<!-- =======================================
-     JAVASCRIPT
-     ======================================= -->
+<!-- JAVASCRIPT -->
 <script>
   const WHATSAPP_NUMBER = "573001234567"; // ⚠️ CAMBIA ESTE NÚMERO
   
-  // ===== OBTENER DATOS DE LA PROPIEDAD DESDE localStorage =====
+  // ===== HELPERS =====
+  function formatCurrency(value) {
+    if (!value) return null;
+    if (typeof value === 'string' && value.includes('$')) return value;
+    const number = parseFloat(value.toString().replace(/[^0-9.-]+/g,""));
+    if (isNaN(number)) return "Consultar";
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(number);
+  }
+
+  // ===== LÓGICA DE FOTOS (LA QUE SÍ FUNCIONA) =====
+  function extraerFileId(https://script.google.com/macros/s/AKfycbyjwA8PvQpuKFcSR5D4o_NrP-Mg9C73lATGeC64I7s2wA2ZWcF8Htx1ez2LJhatHMSrOQ/exec) {
+    if (!url || url.trim() === '') return null;
+    url = url.trim();
+
+    // Patrón 1: /file/d/ID/
+    let m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (m) return m[1];
+
+    // Patrón 2: open?id=ID  o  ?id=ID  o  &id=ID
+    m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (m) return m[1];
+
+    // Patrón 3: /d/ID (YouTube-style o Drive corto)
+    m = url.match(/\/d\/([a-zA-Z0-9_-]{10,})/);
+    if (m) return m[1];
+
+    return null;
+  }
+
+  function normalizarFoto(url) {
+    if (!url || url.trim() === '') return null;
+
+    // Si ya es una URL directa de Drive uc, la devolvemos tal cual
+    if (url.includes('drive.google.com/uc?')) return url;
+
+    const fileId = extraerFileId(url);
+    if (fileId) {
+      // Usamos thumbnail que no requiere autenticación.
+      // CAMBIO: Usamos sz=w1200 para alta calidad en la página de detalle (en la tabla usabas w400).
+      return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+    }
+
+    // Si no es de Drive, retornamos la URL original
+    return url;
+  }
+  
+  // ===== CARGA DE DATOS =====
   function cargarPropiedad() {
     try {
       const propiedadData = localStorage.getItem('propiedadSeleccionada');
       
       if (!propiedadData) {
-        mostrarError('No se encontró información de la propiedad');
+        mostrarError('No se encontró información de la propiedad.<br>Por favor, regresa al listado.');
         return;
       }
       
       const propiedad = JSON.parse(propiedadData);
-      console.log('✅ Propiedad cargada:', propiedad);
-      
       renderizarPropiedad(propiedad);
       
     } catch (error) {
       console.error('❌ Error cargando propiedad:', error);
-      mostrarError('Error al cargar la información de la propiedad');
+      mostrarError('Error al procesar la información.');
     }
   }
   
-  // ===== RENDERIZAR TODA LA INFORMACIÓN =====
   function renderizarPropiedad(prop) {
-    // Ocultar mensaje de carga
     document.getElementById('mensajeCarga').style.display = 'none';
     document.getElementById('contenidoPropiedad').style.display = 'block';
     
-    // ===== TÍTULO Y UBICACIÓN =====
-    document.getElementById('propTitulo').textContent = prop["Título"] || "Sin título";
-    
+    // Textos
+    document.getElementById('propTitulo').textContent = prop["Título"] || "Propiedad sin título";
     const ciudad = prop["Ciudad"] || "";
     const barrio = prop["Barrio/Sector"] || "";
     document.getElementById('propUbicacion').textContent = `${ciudad}${barrio ? ', ' + barrio : ''}`;
     
-    // ===== TIPO =====
     const tipo = prop["Tipo"] || "Propiedad";
     const clasificacion = prop["Residencial / Comercial"] || "";
-    document.getElementById('propTipo').textContent = `${tipo} ${clasificacion}`;
+    document.getElementById('propTipo').textContent = `${tipo} ${clasificacion}`.trim();
     
-    // ===== CARACTERÍSTICAS =====
     document.getElementById('propArea').textContent = prop["Área m2"] || "0";
     document.getElementById('propHabitaciones').textContent = prop["Habitaciones"] || "0";
     document.getElementById('propBanos').textContent = prop["Baños"] || "0";
     document.getElementById('propParqueaderos').textContent = prop["Parqueaderos"] || "0";
-    
-    // ===== DESCRIPCIÓN =====
     document.getElementById('propDescripcion').textContent = prop["Descripción"] || "Sin descripción disponible.";
     
-    // ===== PRECIOS =====
+    // Precios
     const estado = prop["Estado"] || "";
-    const precioVenta = prop["Precio Venta COP"] || "";
-    const precioArriendo = prop["Precio Arriendo COP"] || "";
+    const precioVenta = formatCurrency(prop["Precio Venta COP"]);
+    const precioArriendo = formatCurrency(prop["Precio Arriendo COP"]);
     
-    // Precio principal
     if (estado.includes("Venta") && precioVenta) {
       document.getElementById('propPrecioVenta').textContent = precioVenta;
       document.getElementById('propEstadoVenta').textContent = "Precio de venta";
@@ -241,71 +280,54 @@
       document.getElementById('propEstadoVenta').textContent = "Precio de arriendo";
     } else {
       document.getElementById('propPrecioVenta').textContent = "Consultar";
-      document.getElementById('propEstadoVenta').textContent = "Precio";
+      document.getElementById('propEstadoVenta').textContent = "";
     }
     
-    // Precio secundario (si tiene ambos)
     if (estado.includes("Venta") && estado.includes("Arriendo") && precioArriendo) {
       document.getElementById('precioArriendoBox').style.display = 'block';
       document.getElementById('propPrecioArriendo').textContent = precioArriendo;
     }
     
-    // ===== DETALLES EXTRA =====
+    // Detalles extra
     document.getElementById('propEstrato').textContent = prop["Estrato"] || "-";
-    document.getElementById('propAdministracion').textContent = prop["Administración"] || "-";
+    document.getElementById('propAdministracion').textContent = prop["Administración"] ? formatCurrency(prop["Administración"]) : "-";
     document.getElementById('propClasificacion').textContent = prop["Residencial / Comercial"] || "-";
     
-    // ===== GALERÍA DE FOTOS =====
+    // Cargar Galeria
     cargarGaleria(prop);
     
-    // ===== BOTÓN WHATSAPP =====
+    // WhatsApp
     document.getElementById('btnWhatsapp').addEventListener('click', () => {
       const titulo = prop["Título"] || "esta propiedad";
-      const mensaje = `Hola! Estoy interesado en ${titulo}`;
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
-      window.open(url, '_blank');
+      const mensaje = `Hola! Estoy interesado en: ${titulo}`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`, '_blank');
     });
   }
   
-  // ===== NORMALIZAR URLs DE GOOGLE DRIVE =====
- function normalizarFoto(url) {
-  if (!url) return null;
-  
-  let m = url.match(/id=([a-zA-Z0-9_-]+)/);
-  if (!m) m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-  if (!m) return url;
-  
-  return "https://lh3.googleusercontent.com/d/" + m[1] + "=w1200";
-}
-  
-  // ===== CARGAR GALERÍA DE FOTOS =====
+  // ===== GALERÍA =====
   function cargarGaleria(prop) {
     const fotosArray = [];
     
-    // Recopilar todas las fotos (Foto 1 hasta Foto 8)
     for (let i = 1; i <= 8; i++) {
-      const fotoKey = `Foto ${i}`;
-      if (prop[fotoKey]) {
-        const fotoNormalizada = normalizarFoto(prop[fotoKey]);
-        if (fotoNormalizada) {
-          fotosArray.push(fotoNormalizada);
-        }
+      const urlOriginal = prop[`Foto ${i}`];
+      if (!urlOriginal || urlOriginal.trim() === '') continue;
+      
+      const urlNormalizada = normalizarFoto(urlOriginal);
+      if (urlNormalizada) {
+        fotosArray.push(urlNormalizada);
       }
     }
     
-    // Si no hay fotos, usar placeholder
     if (fotosArray.length === 0) {
       fotosArray.push('https://via.placeholder.com/1200x800?text=Sin+Imagen');
     }
     
-    // Establecer foto principal
     const imgPrincipal = document.getElementById('imgPrincipal');
     imgPrincipal.src = fotosArray[0];
     imgPrincipal.onerror = function() {
-      this.src = 'https://via.placeholder.com/1200x800?text=Sin+Imagen';
+      this.src = 'https://via.placeholder.com/1200x800?text=Error+al+cargar';
     };
     
-    // Crear thumbnails
     const thumbnailsContainer = document.getElementById('thumbnailsContainer');
     thumbnailsContainer.innerHTML = '';
     
@@ -317,45 +339,34 @@
       img.src = foto;
       img.alt = `Foto ${index + 1}`;
       img.onerror = function() {
-        this.src = 'https://via.placeholder.com/400x300?text=Sin+Imagen';
+        if(!this.src.includes('placeholder')) this.src = 'https://via.placeholder.com/400x300?text=Error';
       };
       
       thumbnail.appendChild(img);
       
-      // Click en thumbnail cambia foto principal
       thumbnail.addEventListener('click', () => {
-        // Cambiar foto principal
         document.getElementById('imgPrincipal').src = foto;
-        
-        // Actualizar clase active
         document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
         thumbnail.classList.add('active');
       });
       
       thumbnailsContainer.appendChild(thumbnail);
     });
-    
-    console.log(`✅ Galería cargada con ${fotosArray.length} foto(s)`);
   }
   
-  // ===== MOSTRAR ERROR =====
   function mostrarError(mensaje) {
     document.getElementById('mensajeCarga').innerHTML = `
       <div class="mensaje-error">
-        <h2>⚠️ Error</h2>
+        <h2>⚠️ Lo sentimos</h2>
         <p>${mensaje}</p>
-        <a href="propiedades.html" class="btn-volver" style="display: inline-flex; margin: 0 auto;">
+        <a href="propiedades.html" class="btn-volver" style="display: inline-block; margin-top: 20px; background: #333; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
           ← Volver al listado
         </a>
       </div>
     `;
   }
   
-  // ===== INICIALIZACIÓN =====
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Módulo Detalle de Propiedad cargado');
-    cargarPropiedad();
-  });
+  document.addEventListener('DOMContentLoaded', cargarPropiedad);
 </script>
 
 </body>
